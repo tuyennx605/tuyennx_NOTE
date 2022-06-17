@@ -22,11 +22,11 @@ VD: ``` ls -al /root  ```  :  liệt kê các file của thư mục root ( cả 
 
 * ```ls [OPTION]... [FILE]...``` : liệt kê thông tin của file và folder
   [OPTION] :
-    * -l : hiển thị tệp hoặc thư mục, kích thước, ngày, thời gian đã sửa đổi, tên tệp hoặc tên thư mục và chủ sở hữu
-    * -a : liệt kê các file ẩn
-    * -h : kết hợp với -l để hiển thị kích thước ở định dạng có thể đọc được của con người
-    * -S : (Sort Size) sắp xếp file theo kích thước giảm dần
-    * -t : sắp xếp file theo thời gian
+    * ***-l*** : hiển thị tệp hoặc thư mục, kích thước, ngày, thời gian đã sửa đổi, tên tệp hoặc tên thư mục và chủ sở hữu
+    * ***-a*** : liệt kê các file ẩn
+    * ***-h*** : kết hợp với -l để hiển thị kích thước ở định dạng có thể đọc được của con người
+    * ***-S*** : (Sort Size) sắp xếp file theo kích thước giảm dần
+    * ***-t*** : sắp xếp file theo thời gian
 
   ===> ```ls -lah``` : liệt kê tất cả các file cả file ẩn
 
@@ -40,11 +40,11 @@ VD: ``` ls -al /root  ```  :  liệt kê các file của thư mục root ( cả 
 * ```grep [OPTION]... PATTERNS [FILE]...``` : tìm kiếm trong file 
 
   * [option] :
-    * -i : Tìm không phân biệt hoa thường
-    * -l : hiển thị danh sách file
-    * -n : thêm sô thứ tự dòng
-    * -v : in ra các dòng không chứa chũô cần tìm
-    * -c : tổng số dòng chứa chuỗi cần tìm
+    * ***-i*** : Tìm không phân biệt hoa thường
+    * ***-l*** : hiển thị danh sách file
+    * ***-n*** : thêm sô thứ tự dòng
+    * ***-v*** : in ra các dòng không chứa chũô cần tìm
+    * ***-c*** : tổng số dòng chứa chuỗi cần tìm
   * VD:
     * ```grep -in tuyen tuyennx.test.txt``` : tìm từ "tuyen" trong file tuyennx.test.txt và không phân biệt hoa thường, in ra dòng của nó
     * ```grep -in '[0-9]' tuyennx.test.txt``` : tìm theo regex trong file tuyennx.test.txt
@@ -52,8 +52,8 @@ VD: ``` ls -al /root  ```  :  liệt kê các file của thư mục root ( cả 
 
 * ```df [OPTION]... [path]...``` : tóm tắt sử dụng không gian đĩa
   * [OPTION] :
-    * -a (all) : list ra tất cả 
-    * -h : để hiện size theo dạng G, M, K...
+    * ***-a*** (all) : list ra tất cả 
+    * ***-h*** : để hiện size theo dạng G, M, K...
   * VD:
     * ```df -h``` : hiện không gian đĩa format size dạng G, M, K
 
@@ -66,8 +66,8 @@ VD: ``` ls -al /root  ```  :  liệt kê các file của thư mục root ( cả 
         mkdir tuyennx/test1 tuyenn/test2 tuyennx/test3
     [option] 
 
-      * -p : tạo cả thư mục cha khi thư mục cha chưa có
-      * -m : set luôn quyền cho folder đó
+      * ***-p*** : tạo cả thư mục cha khi thư mục cha chưa có
+      * ***-m*** : set luôn quyền cho folder đó
     ==> ``` mkdir -p -m 777 tuyennx/test3 ```
 
 * ``` pwd ``` : xem đường dẫn hiện tại đang đứng
@@ -84,9 +84,9 @@ VD: ``` ls -al /root  ```  :  liệt kê các file của thư mục root ( cả 
 
     [option] :
 
-      * -h : đọc được dung lượng cua folder như kilobyte, megabyte, gigabyte ...
-      * -d N : đặt độ sâu N cho cây thư mục hiện ra
-      * --time : thời gian cập nhập gần nhất folder (--time=access : thời gian truy cập gần nhất hoặc  --time-style=STYLE (--time-style="+%Y-%m-%d %H:%M:%S"   hoặc --time-style=iso) )
+      * ***-h*** : đọc được dung lượng cua folder như kilobyte, megabyte, gigabyte ...
+      * ***-d N*** : đặt độ sâu N cho cây thư mục hiện ra
+      * ***--time*** : thời gian cập nhập gần nhất folder (--time=access : thời gian truy cập gần nhất hoặc  --time-style=STYLE (--time-style="+%Y-%m-%d %H:%M:%S"   hoặc --time-style=iso) )
 
     ===> ``` du -h -d 2 tuyennx ``` : hiện thông tin đến độ sâu 2 của thư mục tuyennx
 
@@ -124,9 +124,9 @@ VD: ``` ls -al /root  ```  :  liệt kê các file của thư mục root ( cả 
 
   [option] :
 
-    * -f : (--force) : tắt thông báo để đỡ phải xác nhận yes
-    * -d : giống rmdir : để xóa thư mục
-    * -r : xóa lần lượt từ con đến cha trong thư mục (đệ quy xóa)
+    * ***-f*** : (--force) : tắt thông báo để đỡ phải xác nhận yes
+    * ***-d*** : giống rmdir : để xóa thư mục
+    * ***-r*** : xóa lần lượt từ con đến cha trong thư mục (đệ quy xóa)
 
   ===> ```rm -rf folder``` : xóa folder và cả con của folder bỏ qua xác nhận
   ===> ```rm file1``` : xóa file
@@ -151,9 +151,9 @@ VD: ``` ls -al /root  ```  :  liệt kê các file của thư mục root ( cả 
 * ``` chmod [options] mode [mode] file1|folder file2|folder ....``` : phân quyền
 
   * [option] :
-    * -R : (Recursive : đệ quy) : áp dụng phân quyền cho tất cả file và folder trong
-    * -f : (force : có hiệu lực) : Vẫn set quyền kể cả xảy ra lỗi
-    * -v : (verbose: rườm rà) : hiển thị ra những đối tượng được xử lý
+    * ***-R*** : (Recursive : đệ quy) : áp dụng phân quyền cho tất cả file và folder trong
+    * ***-f*** : (force : có hiệu lực) : Vẫn set quyền kể cả xảy ra lỗi
+    * ***-v*** : (verbose: rườm rà) : hiển thị ra những đối tượng được xử lý
   * Ví dụ:
     * ```sudo chmod -R 777 tuyennx``` : set full quyền cho tuyennx
 
