@@ -37,8 +37,20 @@
     * VD:
       * ```docker rmi hello-world```: cũng là xóa
 
+* ***Đưa docker image lên hub***:
+  * ```docker login [OPTIONS] [SERVER]``` : để login vào docker hub
+    * [OPTIONS] :
+      * ```--password , -p``` : pass
+      * ```--username , -u```: username
+    * VD:
+      ```docker login -u tuyennx -p 123456```
 
+  * ```docker push [OPTIONS] NAME[:TAG]```:  đẩy 1 image lên docker hub
+    * VD:
+      ```docker push tuyennx/test_image:v1```
 
+  ***NOTE***: khi tạo image từ container thì nên đặt tên theo dạng : ***YOUR_DOCKERHUB_NAME/docker-image-name:version***
+      * Trong đó : *YOUR_DOCKERHUB_NAME* là docker hub name của 
 ## 3. Docker Container:  [LINK](https://docs.docker.com/engine/reference/commandline/container/)
   ``` docker container COMMAND```
 
@@ -207,7 +219,7 @@ docker run --name=influxdb -d -p 8086:8086 \
 ***
 
 
-# Docker file
+# 4. Docker file
 ***
 ## Định nghĩa:
 * Dockerfile là file có tên là *Dockerfile*, là 1 file dạng text để build image từ các lệnh trong nó. Nghĩa là trong đó có các lệnh, chạy các lệnh xong nó sẽ build 1 image cho chúng ta
@@ -325,7 +337,7 @@ ENTRYPOINT  ["npm", "run", "start:prod"]
 
 
 
-# docker-compose.yml [Link](https://docs.docker.com/compose/compose-file/)
+# 5. docker-compose.yml [Link](https://docs.docker.com/compose/compose-file/)
 
 ## Chạy file:
 * ***Chạy các thành phần:***
