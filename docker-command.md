@@ -36,6 +36,8 @@
   * ```docker rmi en_image:tag_image  ||  ID_image``` : cũng là xóa 1 image
     * VD:
       * ```docker rmi hello-world```: cũng là xóa
+  
+  * ```docker rmi -f $(docker images -a -q)``` : xóa toàn bộ image
 
 * ***Đưa docker image lên hub***:
   * ```docker login [OPTIONS] [SERVER]``` : để login vào docker hub
@@ -81,6 +83,23 @@
   * ```docker restart [OPTIONS] CONTAINER [CONTAINER...]``` : restart container
     * VD: 
       * ```docker restart my_container``` : restart my_container
+
+* ***Xóa container*** :
+  * ```docker rm [OPTIONS] CONTAINER [CONTAINER...]``` : xóa container
+    * [OPTIONS] :
+      * ***-f*** : (--force) : xóa container kể cả khi nó running
+    * VD:
+      * ```docker rm ea8``` : xóa container có id hoặc name là ea8 (container này phải stop ) 
+      * ```docker rm -f ea8``` : xóa container có id hoặc name là ea8 kể cả nó đang chạy luôn 
+
+  * ``` docker container prune [OPTIONS]``` : xóa toàn bộ container đã dừng
+    * VD:
+      * ```docker container prune``` : xóa toàn bộ container đã dừng
+
+
+  * ```docker stop $(docker ps -a -q)```: dừng toàn bộ container
+
+  * ```docker rm $(docker ps -a -q)```: xóa toàn bộ container
 
 
 * ***Tạo container*** :
@@ -130,18 +149,6 @@
       * ***-m***: (--message) : commit message
     * VD:
       * ```docker commit -a tuyennx_author -m "messsage commit"  name_id_container tuyennx/test_image:v1```  : tạo image với author : tuyennx_author, ....
-
-* ***Xóa container*** :
-  * ```docker rm [OPTIONS] CONTAINER [CONTAINER...]``` : xóa container
-    * [OPTIONS] :
-      * ***-f*** : (--force) : xóa container kể cả khi nó running
-    * VD:
-      * ```docker rm ea8``` : xóa container có id hoặc name là ea8 (container này phải stop ) 
-      * ```docker rm -f ea8``` : xóa container có id hoặc name là ea8 kể cả nó đang chạy luôn 
-
-  * ``` docker container prune [OPTIONS]``` : xóa toàn bộ container đã dừng
-    * VD:
-      * ```docker container prune``` : xóa toàn bộ container đã dừng
 
 
 * ***Copy file/folders giữa local và container***:
