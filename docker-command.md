@@ -463,13 +463,225 @@ services:
         ```
 
 
+# 6. docker swarm : [Link](https://docs.docker.com/engine/swarm/)
+
+## Swarm mode CLI commands
+
+* ***docker swarm init*** [Link](https://docs.docker.com/engine/reference/commandline/swarm_init/): Tạo một node swarm mới
+  * ```docker swarm init --advertise-addr=10.160.81.18  // dia chi may manager``` : tạo một swarm node
+
+* ***docker swarm join*** : [link](https://docs.docker.com/engine/reference/commandline/swarm_join/) : tham gia một swarm
+  * ```docker swarm join-token worker  ```  : lay lenh token de cac host khac co the gia nhap warm
+
+* ***docker swarm leave*** [link](https://docs.docker.com/engine/reference/commandline/swarm_leave/) : worker sẽ rời khỏi swarm
+  * ```docker swarm leave ```
+
+## swarm node :[link](https://docs.docker.com/engine/reference/commandline/node/)
+ là con của swarm, 1 swarm sẽ có 1 hoặc nhiều node, trong đó có 1 node là node master quản lý các node worker
+  * ***docker node ls [OPTIONS]***: liệt kê danh sách các node có trong swarm bao gồm id, hostname, status .... mà chú ý nhé: chúng ta có thể filter theo id, label, name, role....
+    * ***OPTIONS*** :
+      * ***--filter , -f***: option để filter theo id, lable, name, role...
+        * VD: 
+          * ```docker node ls -f id=1``` : matched all id có số 1
+
+  * ***docker node inspect [OPTIONS] self|NODE [NODE...]*** : lấy thông tin của 1 node
+    * VD:
+      ``` docker node inspect ten_node``` : lấy thông tin của node tên là ten_node 
+  
+  * ***docker node ps [OPTIONS] [NODE...]*** : 
+
+  * ***docker node update [OPTIONS] NODE*** : update lại  về label, role ....
+
+  * ***docker node rm [OPTIONS] NODE [NODE...]*** : xóa node khỏi swarm
+    * VD: ```docker node rm swarm-node-02```: xóa node
 
 
+## Swarm service : [link](https://docs.docker.com/engine/reference/commandline/service/)
+  là con của swarm hay nói cách khác là các dịch vụ của swarm. ví dụ: chạy 1 swarm service về backend, 1 swarm service FE .... Mỗi swarm service sẽ có nhiều replica, mỗi replica sẽ ở các node khác nhau
+
+* ***docker service create [OPTIONS] IMAGE [COMMAND] [ARG...]*** : tạo mới 1 service 
+  * ***OPTIONS*** : 
+    * ***--replicas*** : số lượng replicas sẽ tạo ra trong 1 service (nói cách khác nó là các tasks của service đó)
+      * VD:
+        ```docker service create --replicas 5 -p 8085:8085 --name testservice unstoppable30121997/swarmtest:node``` : tạo service mới từ image unstoppable...:node với 5 replicas
+    * ***--name*** : service name
+    * ***--publish , -p*** : publish port ra ngoài
+      * VD:
+          ``` docker service create --replicas 5 -p 8086:8085 --name testservice unstoppable30121997/swarmtest:node``` : mở port 8086 map vơi port 8085 trong service
+    * ***--network*** : tạo service với network nào (lưu ý nhé: cần là network kiểu overlay )
+      * VD:
+        ``` docker service create --replicas 3 --name myservice -p 8888:80 --network mynetwork1 busybox top``` : tạo service mới với network là network1
+    * ***--limit-cpu*** : giới hạn cpu của mỗi service
+    * ***--limit-memory*** : giới hạn ram
+      * VD: ```docker service create --limit-memory=4GB --name=too-big nginx:alpine```
+
+* ***docker service ls [OPTIONS]*** : list ra các service đang chạy trong swarm
+  * VD:
+    * ```docker service ls```
+    * ```docker service ls -f "id=0bcjw"``` : serch theo id
+
+* ***docker service ps [OPTIONS] SERVICE [SERVICE...]*** : list ra các task(replica) có trong 1 service 
+  * VD:
+    * ```docker service ps redis``` : hiện ra các task (replica) trong service redis
+
+* ***docker service update [OPTIONS] SERVICE*** : update lại option cho service:
+  * ***OPTIONS:***    VD: ```docker service update --image=unstoppable30121997/swarmtest:php tenservice ```
+    * ***--replicas***: update lại số lượng replica (task)
+    * ***--image*** : update lại image
+    * ***--limit-cpu*** : update lại limit cpu
+    * ***--limit-memory***: update lại limit mem
 
 
+* ***docker service inspect [OPTIONS] SERVICE [SERVICE...]*** : hiện ra thông tin chi tiết của service 
+
+* ***docker service logs [OPTIONS] SERVICE|TASK***: hiện logs của service hoặc task
 
 
+* ***docker service rollback [OPTIONS] SERVICE*** : quay trở lại version cũ
+  * VD: 
+    * ```docker service rollback my-service``` : quay lại 
 
+* ***docker service rm SERVICE [SERVICE...]*** : xóa service đi khỏi swarm
+  * VD:
+    * ```docker service rm redis``` : xóa service redis
+
+
+* ***docker service scale SERVICE=REPLICAS [SERVICE=REPLICAS...]*** : scale tăng hoặc giảm lượng replica của 1 service
+  * VD:
+    * ```docker service scale testservice=10 ``` : gán lại lượng replica cho testservice là 10
+
+# 7. Docker stack : [link](https://docs.docker.com/engine/reference/commandline/stack/)
+Là sự kết hợp giữa docker swarm và docker compose
+
+file docker-compose sẽ có thêm phần deploy :
+
+```yml
+version: '3.7'
+
+services:
+  service1:
+    image: unstoppable30121997/swarmtest:node
+    ports:
+     - 8085:8085
+    
+    deploy:
+      replicas: 5 # có bao nhiêu replica
+      resources:
+        limits:  # đặt rule cho tài nguyên tối đa của 1 container
+          cpus: '0.5' # giới hạn 50% của 1 core
+          memory: 150MB
+        reservations:  # đặt rule tối thiểu của container
+          cpus: '0.25' 
+          memory: 50MB
+      restart_policy: # khởi động lại container theo điều kiện gì
+        condition: on-failure
+
+  service2:
+    image: unstoppable30121997/swarmtest:php
+    ports:
+     - 8086:8085
+    
+    deploy:
+      replicas: 4
+      resources:
+        limits:  
+          cpus: '0.5'
+          memory: 150MB
+        reservations:  
+          cpus: '0.25' 
+          memory: 50MB
+      restart_policy:
+        condition: on-failure
+```
+
+để chạy theo mạng mà mình đặt ra thì chúng ta phải tạo ra 1 mạng mới có kiểu là ***overlay*** chứ ko thì mặc định mạng sẽ là ***ingress*** . để tạo thì xem lại phần network hoặc như sau:
+
+```bash
+docker network ls   : list ra danh sách các network 
+
+docker network create --driver overlay mynetwork1   : #tạo 1 mạng overlay tên là myntework1 (tạo ở master node nhé)
+docker network create --driver overlay --attachable  mynetwork2 : #tao mạng với tham số attachable để các node con có quyền gắn 1 con khác chạy độc lập vào
+
+
+#==> khi chạy service thêm tham số network vào : docker service create --replicas 3 --name myservice -p 8888:80 --network mynetwork1 busybox top
+#====> khi cùng mạng chúng ta có thể ping theo tên của container : docker exec 06 ping myservice.1.ehvmijwuqc0j5c66z5di3pg8w
+```
+
+file compose sẽ như sau:
+
+```yaml
+version: '3.7'
+
+services:
+  service1:
+    image: unstoppable30121997/swarmtest:node
+    networks:
+      - net1
+    ports:
+     - 8085:8085
+    
+    deploy:
+      replicas: 5 # có bao nhiêu replica
+      resources:
+        limits:  # đặt rule cho tài nguyên tối đa của 1 container
+          cpus: '0.5' # giới hạn 50% của 1 core
+          memory: 150MB
+        reservations:  # đặt rule tối thiểu của container
+          cpus: '0.25' 
+          memory: 50MB
+      restart_policy: # khởi động lại container theo điều kiện gì
+        condition: on-failure
+
+  service2:
+    image: unstoppable30121997/swarmtest:php
+    networks:
+      - net2
+    ports:
+     - 8086:8085
+    
+    deploy:
+      replicas: 4
+      resources:
+        limits:  
+          cpus: '0.5'
+          memory: 150MB
+        reservations:  
+          cpus: '0.25' 
+          memory: 50MB
+      restart_policy:
+        condition: on-failure
+
+networks:
+  net1: # để tự tạo mặc định xem nó thế nào (nếu chạy docker stack thì nó sẽ tạo mạng là overlay)
+  net2: # tạo và cấu hình nó
+    driver: overlay
+    name: www-net2
+```
+
+* ***docker stack deploy [OPTIONS] STACK***: chạy 1 stack theo docker compose ```docker stack deploy --compose-file docker-compose.yml teststack ```
+  * ***OPTIONS:***
+    * ***--compose-file , -c*** : đường dẫn đến file compose hoặc nếu là "-" thì đọc từ stdin
+      VD:
+        * ```docker stack deploy --compose-file docker-compose.yml name_stack```
+        * ```cat docker-compose.yml | docker stack deploy --compose-file - name_stack``` : tạo từ stdin vào
+
+* ***docker stack ls [OPTIONS]***: liệt kê stack
+  * VD:
+    * ```docker stack ls```: liệt kê
+
+* ***docker stack ps [OPTIONS] STACK***: liệt kê các task (replica) trong 1 stack cụ thể
+  * VD:
+    * ```docker stack ps my_stack``` : liệt kê các task(replica) trong stack my_stack
+    * ```docker stack ps -f "name=voting_redis" my_stack``` : filter....
+ 
+* ***docker stack rm [OPTIONS] STACK [STACK...]***: xóa stack
+  * VD:
+    * ```docker stack rm my_stack``` : xóa stack
+  
+* ***docker stack services [OPTIONS] STACK***: list ra các service đang chạy trong 1 stack cụ thể
+  * VD:
+    * ```docker stack services my_stack```:
+    * ```docker stack services --filter name=myapp_web --filter name=myapp_db my_stack```: filter
 
 
 
